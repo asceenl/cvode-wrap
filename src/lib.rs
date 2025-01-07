@@ -106,6 +106,7 @@
 use std::{ffi::c_void, os::raw::c_int, ptr::NonNull};
 
 use sundials_sys::{realtype, SUNComm, SUNContext, SUNContext_};
+pub type SunContext = std::ptr::NonNull<SUNContext_>;
 
 mod nvector;
 pub use nvector::{NVectorSerial, NVectorSerialHeapAllocated};
@@ -226,12 +227,10 @@ fn check_flag_is_succes(flag: c_int, func_id: &'static str) -> Result<()> {
     }
 }
 
-pub type SunContext = std::ptr::NonNull<SUNContext_>;
-
 fn sundials_create_context() -> Result<SunContext> {
     let context = unsafe {
         let mut context: SUNContext = std::ptr::null_mut();
-        let ompi_communicator_t: SUNComm = std::ptr::null_mut();
+        let ompi_communicator_t: SUNComm = 0;
         sundials_sys::SUNContext_Create(ompi_communicator_t, &mut context);
         check_non_null(context, "SUNContext_Create")?;
         std::ptr::NonNull::new(context).unwrap()
