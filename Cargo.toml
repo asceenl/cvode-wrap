@@ -14,10 +14,14 @@ keywords = ["sundials", "cvode", "cvodes", "ode", "sensitivities"]
 categories = ["science", "simulation", "api-bindings"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-sundials-sys = { git = "https://github.com/Chris00/sundials-sys", default-features = false, features = [ "cvodes", "build_libraries"] }
 array-init = "2.0"
+
+[target.'cfg(windows)'.dependencies]
+sundials-sys = { git = "https://github.com/Chris00/sundials-sys", rev = "ae14510", default-features = false, features = [ "cvodes" ] }
+
+[target.'cfg(unix)'.dependencies]
+sundials-sys = { git = "https://github.com/Chris00/sundials-sys", rev = "ae14510", default-features = false, features = [ "cvodes", "build_libraries" ] }
 
 [package.metadata.docs.rs]
 
